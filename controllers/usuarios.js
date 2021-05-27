@@ -1,8 +1,6 @@
 const { request, response } = require( 'express' );
-
 // Crear instancias de nuestro modelo
 const Usuario = require( '../models/usuario' );
-
 // bcryptjs: librería que nos permite encriptar contraseñas
 const bcryptjs = require( 'bcryptjs' );
 
@@ -28,21 +26,20 @@ const usuariosGet = async ( req = request, res = response ) => {
     ] );
 
     res.json( {
-        // total,
-        // usuarios
         total,
-        usuarios
+        usuarios,
     } );
 };
 
-const usuariosPost = async ( req, res = response ) => {    
+// Los POST usualmente envían la data por el body
+const usuariosPost = async ( req, res = response ) => {
 
     // Se desestructura el objeto para obtener los datos que son obligatorios
     const { nombre, correo, password, rol } = req.body;
     const usuario = new Usuario( { nombre, correo, password, rol } );
 
     // Encriptar la contraseña
-    // .genSaltSync() recibe como argumento el numero de vueltas que encriptara la contraseña, valor por defcto 10
+    // .genSaltSync() recibe como argumento el numero de vueltas que encriptara la contraseña, valor por defecto 10
     const salt = bcryptjs.genSaltSync();
     usuario.password = bcryptjs.hashSync( password, salt );
 

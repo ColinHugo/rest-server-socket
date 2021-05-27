@@ -3,7 +3,7 @@ const { Schema, model } = require( 'mongoose' );
 const UsuarioSchema = Schema( {
     nombre: {
         type: String,
-        required: [ true, 'El nombre es obligatorioa' ],
+        required: [ true, 'El nombre es obligatorio' ],
     },
 
     correo: {
@@ -29,7 +29,7 @@ const UsuarioSchema = Schema( {
 
     estado: {
         type: Boolean,
-        default: true
+        default: true,
     },
 
     google: {
@@ -47,4 +47,6 @@ UsuarioSchema.methods.toJSON = function () {
     return usuario;
 }
 
+// model(): la función pide el nombre, no sólo del modelo, también va ayudar para ponerle el nombre a la colección
+// moongose por defecto le agrega una 's' al final
 module.exports = model( 'Usuario', UsuarioSchema );

@@ -1,5 +1,5 @@
-// express-validator: libreria que nos permite validar correos electrónicos
-const { validationResult } = require('express-validator');
+// express-validator: librería que nos permite validar correos electrónicos
+const { validationResult } = require( 'express-validator' );
 
 const validarCampos = ( req, res, next ) => {
 
