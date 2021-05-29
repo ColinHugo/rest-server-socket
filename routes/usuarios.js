@@ -2,7 +2,8 @@ const Router = require( 'express' );
 // express-validator: librería que nos permite validar correos electrónicos
 const { check } = require('express-validator');
 
-const { validarCampos } = require( '../middlewares/validar-campos' );
+const { validarCampos, validarJWT, esAdminRole, getRole } = require( '../middlewares' );
+
 const { esRoleValido, emailExiste, existeUsuarioPorId } = require('../helpers/db-validators');
 
 const { usuariosGet,
@@ -35,6 +36,9 @@ router.put( '/:id', [
 
 // :id: segmento del url
 router.delete( '/:id', [
+    validarJWT,
+    //esAdminRole,
+    getRole( 'ADMIN_ROLE', 'VENTAS_ROLE', 'OTRO_ROL' ),
     check( 'id', 'No es un id válido' ).isMongoId(),
     check( 'id' ).custom( existeUsuarioPorId ),
     validarCampos

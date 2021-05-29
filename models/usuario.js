@@ -43,7 +43,8 @@ const UsuarioSchema = Schema( {
 UsuarioSchema.methods.toJSON = function () {
 
     // Se desestructura para ignorar los valores que se deseen y unificar los valores que nos interesa
-    const { __v, password, ...usuario } = this.toObject();
+    const { __v, password, _id, ...usuario } = this.toObject();
+    usuario.uid = _id;
     return usuario;
 }
 

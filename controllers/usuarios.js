@@ -72,12 +72,19 @@ const usuariosDelete = async ( req, res = response ) => {
     // como en el router se pasa el segmento :id a través de la url, la función params del objeto req es quien tiene el valor
     const { id } = req.params;
 
+    // Desde el middleware se añade el atributo uid al objeto req
+    // const uid = req.uid;
+    // const usuarioAutenticado = req.usuario;
+
     // Físicamente lo borramos
     // const usuario = await Usuario.findByIdAndDelete( id );
 
     const usuario = await Usuario.findByIdAndUpdate( id, { estado: false } );
 
-    res.json( usuario );
+    // res.json({ usuario, uid } );
+    // res.json({ usuario, usuarioAutenticado } );
+    res.json({ usuario } );
+
 }
 
 const usuariosPatch = ( req, res = response ) => {
