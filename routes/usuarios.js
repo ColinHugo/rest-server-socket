@@ -1,4 +1,4 @@
-const Router = require( 'express' );
+const router = require( 'express' ).Router();
 // express-validator: librería que nos permite validar correos electrónicos
 const { check } = require('express-validator');
 
@@ -12,13 +12,12 @@ const { usuariosGet,
         usuariosDelete,
         usuariosPatch } = require( '../controllers/usuarios' );
 
-const router = Router();
-
 router.get( '/', usuariosGet );
 
 // check() va generando los errores que se vayan generando en la validación
-router.post( '/', [ 
-    check( 'nombre', 'El nombre es obligatorio' ).not().isEmpty(),
+// se especifica que campo del body hay que checar
+router.post( '/', [
+    check( 'nombre', 'El nombre es obligatorio' ).trim().not().isEmpty(),
     check( 'password', 'El password debe tener al menos 6 caracteres' ).isLength( { min: 6 } ),
     check( 'correo', 'El correo no es válido' ).isEmail(),
     check( 'correo').custom( emailExiste ),

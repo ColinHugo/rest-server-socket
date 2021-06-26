@@ -5,7 +5,10 @@ const Usuario = require( '../models/usuario' );
 
 const validarJWT = async ( req = request, res = response, next ) => {
 
+    // 1o hay que ser capaz de obtener el jwt desde el lugar que se desee
+    // si es un token de acceso se acostumbra que vaya en los headers, dentro de los header se puede poner el nombre que se quiera
     // req.header: leer los headers
+    // 'x-token': nombre del token que se desea
     const token = req.header( 'x-token' );
 
     if( !token ){

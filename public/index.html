@@ -4,12 +4,65 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso Denegado</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Google Signin</title>
+    <meta name="google-signin-client_id" content="494972167710-hqn05g8gf91ekeue89g8q5ceapiq5lpm.apps.googleusercontent.com">
 </head>
 <body>
 
-    <h1>Acceso Denegado!</h1>
-    
+    <h1>Google Signin</h1>
+    <hr>
+
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+    <a href="#" onclick="signOut();">Sign out</a>
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <script>
+
+        var url = ( window.location.hostname.includes( 'localhost' ) )
+            ? 'http://localhost:8080/api/auth/google'
+            : 'https://restserver-curso-node-hcm.herokuapp.com/api/auth/google'
+
+        function onSignIn(googleUser) {
+
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+            // Envíe el token de identificación a su servidor
+            // Después de que un usuario inicie sesión correctamente, obtenga el token de identificación del usuario:
+            var id_token = googleUser.getAuthResponse().id_token;
+
+            // El body tiene que tener el id_token en el formato que se espera
+            const data = { id_token };
+
+            // Para poder recibir el id_token, necesitamos hacer una petición a nuestro backend
+            // tenemos que generar una ruta para manejar nuestro backend
+            fetch( url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                // Mandar el body de la petición,
+                // el body en un application json tiene que ir serializado como un JSON
+                body: JSON.stringify( data )
+            } )
+                .then( resp => resp.json() )
+                .then( data => console.log( 'Nuestro server', data ) )
+                .catch( console.log );
+        }
+
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+            });
+        }
+
+
+    </script>
+
+
 </body>
 </html>

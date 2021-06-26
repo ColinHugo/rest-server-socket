@@ -24,6 +24,7 @@ const UsuarioSchema = Schema( {
     rol: {
         type: String,
         required: true,
+        default: 'USER_ROLE',
         enum: [ 'ADMIN_ROLE', 'USER_ROLE' ]
     },
 
@@ -49,5 +50,5 @@ UsuarioSchema.methods.toJSON = function () {
 }
 
 // model(): la función pide el nombre, no sólo del modelo, también va ayudar para ponerle el nombre a la colección
-// moongose por defecto le agrega una 's' al final
+// mongoose por defecto le agrega una 's' al final
 module.exports = model( 'Usuario', UsuarioSchema );
