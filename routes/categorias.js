@@ -4,10 +4,10 @@ const { check } = require('express-validator');
 const { validarJWT, validarCampos, esAdminRole } = require('../middlewares');
 
 const { crearCategoria,
-    obtenerCategorias,
-    obtenerCategoria,
-    actualizarCategoria,
-    borrarCategoria } = require('../controllers/categorias');
+        obtenerCategorias,
+        obtenerCategoria,
+        actualizarCategoria,
+        borrarCategoria } = require('../controllers/categorias');
 const { existeCategoriaPorId } = require('../helpers/db-validators');
 
 /**
@@ -47,7 +47,5 @@ router.delete('/:id',[
     check('id').custom( existeCategoriaPorId ),
     validarCampos,
 ],borrarCategoria);
-
-
 
 module.exports = router;

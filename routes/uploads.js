@@ -12,16 +12,13 @@ router.put( '/:coleccion/:id', [
     check( 'id', 'El id debe ser de mongo' ).isMongoId(),
     check( 'coleccion' ).custom( c => coleccionesPermitidas( c, [ 'usuarios', 'productos' ] ) ),
     validarCampos
-], actualizarImagenCloudinary );
-// ], actualizarImagen );
+// ], actualizarImagenCloudinary );
+], actualizarImagen );
 
 router.get( '/:coleccion/:id', [
     check( 'id', 'El id debe ser de mongo' ).isMongoId(),
     check( 'coleccion' ).custom( c => coleccionesPermitidas( c, [ 'usuarios', 'productos' ] ) ),
     validarCampos
 ], mostrarImagen );
-
-
-
 
 module.exports = router;

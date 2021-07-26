@@ -63,10 +63,7 @@ const coleccionesPermitidas = ( coleccion = '', colecciones = [] ) => {
     }
 
     return true;
-
 }
-
-
 
 module.exports = {
     esRoleValido,
@@ -76,4 +73,3 @@ module.exports = {
     existeProductoPorId,
     coleccionesPermitidas,
 }
-
