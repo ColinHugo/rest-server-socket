@@ -1,5 +1,4 @@
-const Role = require('../models/role');
-const { Usuario, Categoria, Producto } = require('../models');
+const { Categoria, Producto, Role, Usuario } = require('../models');
 
 const esRoleValido = async(rol = '') => {
 

@@ -104,7 +104,6 @@ const buscar = ( req, res ) => {
             res.status( 500 ).json( {
                 msg: 'Se me olvidó hacer esta búsqueda'
             } );
-
     }
 }
 

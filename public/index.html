@@ -12,57 +12,66 @@
     <h1>Google Signin</h1>
     <hr>
 
-    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <div id="g_id_onload"
+         data-client_id="494972167710-odkfr1mjlb3eu4ebmk1mo5jv7c60i7e1.apps.googleusercontent.com"
+         data-auto_prompt="false"
+         data-callback="handleCredentialResponse">
+    </div>
 
-    <a href="#" onclick="signOut();">Sign out</a>
+    <div class="g_id_signin"
+        data-type="standard"
+        data-size="large"
+        data-theme="outline"
+        data-text="sign_in_with"
+        data-shape="rectangular"
+        data-logo_alignment="left">
+    </div>
 
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <button id="google_signout">
+        Sign Out
+    </button>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <script>
+        function handleCredentialResponse( response ) {
 
-        var url = ( window.location.hostname.includes( 'localhost' ) )
-            ? 'http://localhost:8080/api/auth/google'
-            : 'https://restserver-curso-node-hcm.herokuapp.com/api/auth/google'
+            // Google token: id Token
+            // console.log( 'ID Token:', response.credential );
 
-        function onSignIn(googleUser) {
+            const body = { id_token: response.credential };
 
-            var profile = googleUser.getBasicProfile();
-            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-            console.log('Name: ' + profile.getName());
-            console.log('Image URL: ' + profile.getImageUrl());
-            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-
-            // Envíe el token de identificación a su servidor
-            // Después de que un usuario inicie sesión correctamente, obtenga el token de identificación del usuario:
-            var id_token = googleUser.getAuthResponse().id_token;
-
-            // El body tiene que tener el id_token en el formato que se espera
-            const data = { id_token };
-
-            // Para poder recibir el id_token, necesitamos hacer una petición a nuestro backend
-            // tenemos que generar una ruta para manejar nuestro backend
-            fetch( url, {
+            fetch( 'http://localhost:8080/api/auth/google', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                // Mandar el body de la petición,
-                // el body en un application json tiene que ir serializado como un JSON
-                body: JSON.stringify( data )
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify( body )
             } )
                 .then( resp => resp.json() )
-                .then( data => console.log( 'Nuestro server', data ) )
-                .catch( console.log );
+                .then( resp => {
+                    console.log( resp );
+                    localStorage.setItem( 'email', resp.usuario.correo );
+                } )
+                .catch( console.warn );
         }
 
-        function signOut() {
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function () {
-                console.log('User signed out.');
-            });
-        }
+        const button = document.getElementById( 'google_signout' );
 
+        button.onclick = () => {
+
+            console.log( google.accounts.id );
+            google.accounts.id.disableAutoSelect();
+
+            google.accounts.id.revoke( localStorage.getItem( 'email' ), done => {
+                localStorage.clear();
+                location.reload();
+            } );
+        }
 
     </script>
 
+    
 
 </body>
 </html>
