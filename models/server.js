@@ -3,17 +3,17 @@ const cors = require( 'cors' );
 const fileUpload = require( 'express-fileupload' );
 
 const { dbConnection } = require('../database/config');
+const { socketController } = require('../sockets/socket-controller');
 
 class Server{
 
-    constructor(){
+    constructor() {
 
         this.app = express();
         this.port = process.env.PORT;
+        this.server = require( 'http' ).createServer( this.app );
+        this.io = require( 'socket.io' )( this.server );
 
-        // this.authPath = '/api/auth';
-        // this.categorias = '/api/categorias';
-        // this.usuariosPath = '/api/usuarios';
         this.paths = {
             auth: '/api/auth',
             buscar: '/api/buscar',
@@ -31,9 +31,12 @@ class Server{
 
         // Rutas de mi aplicación
         this.routes();
+
+        // Sockets
+        this.sockets();
     }
 
-    middlewares(){
+    middlewares() {
 
         // Cors
         this.app.use( cors() );
@@ -52,14 +55,11 @@ class Server{
         } ) );
     }
 
-    async conectarDB(){
+    async conectarDB() {
         await dbConnection();
     }
 
     routes(){
-        // this.app.use( this.authPath, require( '../routes/auth' ) );
-        // this.app.use( this.categorias, require( '../routes/categorias' ) )
-        // this.app.use( this.usuariosPath, require( '../routes/usuarios' ) );
         this.app.use( this.paths.auth, require( '../routes/auth' ) );
         this.app.use( this.paths.buscar, require( '../routes/buscar' ) );
         this.app.use( this.paths.categorias, require( '../routes/categorias' ) );
@@ -68,9 +68,13 @@ class Server{
         this.app.use( this.paths.usuarios, require( '../routes/usuarios' ) );
     }
 
-    listen(){
+    sockets() {
+        this.io.on("connection", ( socket ) => socketController( socket, this.io ) );
+    }
 
-        this.app.listen( this.port, () => {
+    listen() {
+
+        this.server.listen( this.port, () => {
             console.log( 'Servidor corriendo en puerto:', this.port );
         } );
     }
